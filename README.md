@@ -8,8 +8,8 @@ For any bird, we can call the name of another bird and it will respond with anot
 
 In Lean, a bird can be modeled as a type with a constructor that takes 2 birds: the bird in question, the bird being called and the bird used as response.
 
-  inductive Bird
-    | Call : Bird -> Bird -> Bird
-  open Bird
+    inductive Bird
+      | Call : Bird -> Bird -> Bird
+    open Bird
 
 From this simple construct it's possible to derive very interesting properties.
