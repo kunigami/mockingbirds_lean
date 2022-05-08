@@ -116,7 +116,7 @@ end
 theorem aggreableness (a b c: Bird)
   -- Composition condition
   (C₁: ∀ a₁ b₁: Bird, ∃ c₁: Bird, composes a₁ b₁ c₁)
-  -- a₁ b₁ c₁ particular instance
+  -- a b c particular instance
   (C₂: composes a b c)
 
   : is_agreeable c → is_agreeable a
@@ -132,7 +132,7 @@ begin
   cases H_c_agr e with x_e Cagr_e,
   have Ce' := C_e x_e,
   have Ce'' := C₂ x_e,
-  -- We show that 'a' and 'd' agree of bind 'b x_e'
+  -- We show that 'a' and 'd' agree on bird 'b x_e'
   existsi b ⬝ x_e,
   rw← Ce',
   rw← Ce'',
