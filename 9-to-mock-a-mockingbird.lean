@@ -106,3 +106,35 @@ begin
   symmetry,
   exact Hcx,
 end
+
+/-
+ Problem 4: A Question on Aggreable Birds
+
+ This is not an easy one.
+-/
+
+theorem aggreableness (a b c: Bird)
+  -- Composition condition
+  (C₁: ∀ a₁ b₁: Bird, ∃ c₁: Bird, composes a₁ b₁ c₁)
+  -- a₁ b₁ c₁ particular instance
+  (C₂: composes a b c)
+
+  : is_agreeable c → is_agreeable a
+
+:=
+begin
+  intro H_c_agr,
+  -- Arbitrary bird which 'a' will agree with
+  intro d,
+  -- This is the main gotcha: introduce variable 'e'
+  -- connecting 'd' and 'b'
+  cases C₁ d b with e C_e,
+  cases H_c_agr e with x_e Cagr_e,
+  have Ce' := C_e x_e,
+  have Ce'' := C₂ x_e,
+  -- We show that 'a' and 'd' agree of bind 'b x_e'
+  existsi b ⬝ x_e,
+  rw← Ce',
+  rw← Ce'',
+  exact Cagr_e,
+end
