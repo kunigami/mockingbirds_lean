@@ -138,3 +138,58 @@ begin
   rw← Ce'',
   exact Cagr_e,
 end
+
+/-
+ Problem 5: An exercise in composition
+-/
+theorem composition3 (a b c: Bird)
+
+  -- Composition condition
+  (C₁: ∀ a b: Bird, ∃ c: Bird, composes a b c)
+
+  : ∃ d: Bird, ∀ x, d ⬝ x = a ⬝ (b ⬝ (c ⬝ x))
+:=
+begin
+  cases C₁ b c with e C_e,
+  rw composes at C_e,
+  cases C₁ a e with d C_d,
+  rw composes at C_d,
+  existsi d,
+  intro x',
+  rw← C_e x',
+  exact C_d x',
+end
+
+/-
+ Problem 6: Compatible birds
+-/
+def is_compatible(a b: Bird): Prop := ∃ x y: Bird, a ⬝ y = x ∧ b ⬝ x = y
+
+theorem compatible (a b: Bird)
+
+  -- Composition condition
+  (C₁: ∀ a b: Bird, ∃ c: Bird, composes a b c)
+  -- A mocking bird exists
+  (C₂: ∃ m: Bird, is_mocking m)
+
+  : is_compatible a b
+:=
+begin
+  cases C₂ with m C_m,
+  -- Use solution to Problem 4
+  cases composition3 a b m C₁ with d H,
+  have H_d := H d,
+  rw is_mocking at C_m,
+  rw C_m at H_d,
+  rw is_compatible,
+  existsi d ⬝ d, -- x
+  existsi b ⬝ (d ⬝ d), -- y
+  split,
+
+  -- Goal 1: a y = x
+  symmetry,
+  exact H_d,
+
+  -- Goal 2: b x = y
+  reflexivity,
+end
