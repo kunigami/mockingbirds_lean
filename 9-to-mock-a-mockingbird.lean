@@ -228,6 +228,9 @@ theorem happy_may_be_normal (h: Bird)
   : ∃ x: Bird, is_normal x
 :=
 begin
+  -- In human terms: if h is a happy bird,
+  -- we can show that the bird c that composes
+  -- h and h is normal
   cases C₂ with x' C₂,
   cases C₂ with y' C₂,
   have C₁hh := C₁ h h,
@@ -241,4 +244,164 @@ begin
   rw is_normal,
   existsi x',
   exact C₁hh',
+end
+
+/-
+ Problem 9: Hopelessly Egocentric
+-/
+
+def is_fixated(a b: Bird): Prop := ∀ x: Bird, a ⬝ x = b
+
+def is_hopelessly_egocentric(a: Bird): Prop := is_fixated a a
+
+def is_kestrel(k: Bird): Prop := ∀ x y: Bird, (k ⬝ x) ⬝ y = x
+
+theorem hopelessly_egocentric
+  (C₁: ∀ a b: Bird, ∃ c: Bird, composes a b c)
+  (C₂: ∃ m, is_mocking m)
+  (C₃: ∃ k, is_kestrel k)
+
+  : ∃ x: Bird, is_hopelessly_egocentric x
+:=
+begin
+  have T₁ := fondness C₁ C₂,
+  cases C₃ with k C₃,
+  have T₁ := T₁ k,
+  cases T₁ with x' T₁',
+  rw is_fond at T₁',
+  rw is_kestrel at C₃,
+  have C₃' := C₃ x',
+  rw T₁' at C₃',
+  existsi x',
+  rw is_hopelessly_egocentric,
+  rw is_fixated,
+  exact C₃',
+end
+
+
+/-
+ Problem 10: Fixation
+-/
+theorem fixation (a b: Bird)
+  (C₁: is_fixated a b)
+  : is_fond a b
+:=
+begin
+  rw is_fixated at C₁,
+  have C₁b := C₁ b,
+  exact C₁b,
+end
+
+/-
+ Problem 11: A Fact About Kestrels
+-/
+theorem hopelessly_egocentric_kestrel (k: Bird)
+  (C₁: is_kestrel k)
+  (C₂: is_egocentric k)
+  : is_hopelessly_egocentric k
+:=
+begin
+  rw is_kestrel at C₁,
+  have C₁k := C₁ k,
+  rw is_egocentric at C₂,
+  rw is_fond at C₂,
+  rw C₂ at C₁k,
+  exact C₁k,
+end
+
+/-
+ Problem 12: Another Fact About Kestrels
+-/
+theorem fond_kestrel (k a: Bird)
+  (C₁: is_kestrel k)
+  (C₂: is_egocentric (k ⬝ a))
+  : is_fond k a
+:=
+begin
+  rw is_kestrel at C₁,
+  have C₁a := C₁ a (k ⬝ a),
+  rw is_egocentric at C₂,
+  rw is_fond at C₂,
+  rw C₂ at C₁a,
+  exact C₁a,
+end
+
+/-
+ Problem 13: A Simple Exercise
+-/
+theorem simple_exercise (a: Bird)
+  (C₁: is_hopelessly_egocentric a)
+  : ∀ x y, a ⬝ x = a ⬝ y
+:=
+begin
+  rw is_hopelessly_egocentric at C₁,
+  rw is_fixated at C₁,
+  intro x',
+  intro y',
+  have C₁x := C₁ x',
+  have C₁y := C₁ y',
+  rw C₁x,
+  rw C₁y,
+end
+
+/-
+ Problem 14: Another Exercise
+-/
+theorem another_exercise (a: Bird)
+  (C₁: is_hopelessly_egocentric a)
+  : ∀ x y, (a ⬝ x) ⬝ y = a
+:=
+begin
+  rw is_hopelessly_egocentric at C₁,
+  rw is_fixated at C₁,
+  intro x',
+  intro y',
+  have C₁x := C₁ x',
+  have C₁y := C₁ y',
+  rw C₁x,
+  rw C₁y,
+end -- exact same proof as in simple_exercise!
+
+/-
+ Problem 15: Hopeless Egocentricity Is Contagious!
+-/
+theorem hopeless_egocentricity_is_contagious (a: Bird)
+  (C₁: is_hopelessly_egocentric a)
+  : ∀ x, is_hopelessly_egocentric (a ⬝ x)
+  :=
+begin
+  intro x',
+  rw C₁ x',
+  exact C₁,
+end
+
+/-
+ Problem 16: Another Fact About Kestrels
+-/
+theorem kestrel_left_cancellation (k a b: Bird)
+  (C₁: is_kestrel k)
+  (C₂: k ⬝ a = k ⬝ b)
+  : a = b
+:=
+begin
+  have C₁bb := C₁ b b,
+  rw← C₂ at C₁bb,
+  have C₁ab := C₁ a b,
+  rw← C₁bb,
+  rw C₁ab,
+end
+
+/-
+ Problem 17: A Fact About Fixation
+-/
+theorem uniqueness_fixation (a b c: Bird)
+  (C₁: is_fixated a b)
+  (C₂: is_fixated a c)
+  : b = c
+:=
+begin
+  have C₁b := C₁ b,
+  have C₂b := C₂ b,
+  rw← C₁b,
+  rw C₂b,
 end
