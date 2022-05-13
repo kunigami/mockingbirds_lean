@@ -176,7 +176,7 @@ theorem compatible (a b: Bird)
 :=
 begin
   cases C₂ with m C_m,
-  -- Use solution to Problem 4
+  -- Use solution to Problem 5
   cases composition3 a b m C₁ with d H,
   have H_d := H d,
   rw is_mocking at C_m,
@@ -192,4 +192,53 @@ begin
 
   -- Goal 2: b x = y
   reflexivity,
+end
+
+/-
+ Problem 7: Happy Birds
+-/
+
+def is_happy(a: Bird): Prop := is_compatible a a
+
+def is_normal(a: Bird): Prop := ∃ x: Bird, is_fond a x
+
+theorem normal_is_happy (a: Bird)
+  (C₁: is_normal a)
+
+  : ∃ x: Bird, is_happy x
+:=
+begin
+  cases C₁ with x' C',
+  existsi a,
+  existsi x',
+  existsi x',
+  split,
+  repeat {exact C'},
+end
+
+
+/-
+ Problem 8: Normal Birds
+-/
+
+theorem happy_may_be_normal (h: Bird)
+  (C₁: ∀ a b: Bird, ∃ c: Bird, composes a b c)
+  (C₂: is_happy h)
+
+  : ∃ x: Bird, is_normal x
+:=
+begin
+  cases C₂ with x' C₂,
+  cases C₂ with y' C₂,
+  have C₁hh := C₁ h h,
+  cases C₁hh with c C₁hh,
+  rw composes at C₁hh,
+  have C₁hh' := C₁hh x',
+  cases C₂ with C₂x C₂y,
+  rw C₂y at C₁hh',
+  rw C₂x at C₁hh',
+  existsi c,
+  rw is_normal,
+  existsi x',
+  exact C₁hh',
 end

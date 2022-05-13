@@ -13,3 +13,6 @@ In Lean, a bird can be modeled as a type with a constructor that takes 2 birds: 
     open Bird
 
 From this simple construct it's possible to derive very interesting properties.
+
+
+NOTE: It's almost impossible to read the code without a plugin that shows the existing hypothesis and goal. I highly recommend using VS Code + Lean plugins or the [Web Editor](https://leanprover-community.github.io/lean-web-editor/).
