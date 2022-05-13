@@ -405,3 +405,44 @@ begin
   rw← C₁b,
   rw C₂b,
 end
+
+/-
+ Problem 18: A Fact About Fixation
+-/
+theorem fond_kestrel_2 (k a: Bird)
+  (C₁: is_kestrel k)
+  (C₂: is_fond k (k ⬝ a))
+  : is_fond k a
+:=
+begin
+  rw is_kestrel at C₁,
+  have C₁ka := C₁ (k ⬝ a) a,
+  rw is_fond at C₂,
+  rw C₂ at C₁ka,
+  have C₁a := C₁ a a,
+  rw C₁a at C₁ka,
+  rw is_fond,
+  symmetry,
+  exact C₁ka,
+end
+
+/-
+ Problem 19: A Riddle
+-/
+theorem egocentric_kestrel (k: Bird)
+  (C₁: is_kestrel k)
+  (C₂: is_egocentric k)
+  : ∀ x: Bird, x = k
+:=
+begin
+  have C₁k := C₁ k,
+  rw is_egocentric at C₂,
+  rw is_fond at C₂,
+  rw C₂ at C₁k,
+  intro x',
+  have C₁' := C₁ x' k,
+  rw C₁k at C₁',
+  rw C₁k at C₁',
+  symmetry,
+  exact C₁',
+end
