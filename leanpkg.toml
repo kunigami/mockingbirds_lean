@@ -1,0 +1,8 @@
+[package]
+name = "mockingbirds_lean"
+version = "0.1"
+lean_version = "leanprover-community/lean:3.42.1"
+path = "src"
+
+[dependencies]
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "c992b04dd295c0033bbdf2eff4bb4a51c800d5ca"}
