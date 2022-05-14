@@ -204,12 +204,12 @@ def is_normal(a: Bird): Prop := ∃ x: Bird, is_fond a x
 
 theorem normal_is_happy (a: Bird)
   (C₁: is_normal a)
-
-  : ∃ x: Bird, is_happy x
+  : is_happy a
 :=
 begin
   cases C₁ with x' C',
-  existsi a,
+  rw is_happy,
+  rw is_compatible,
   existsi x',
   existsi x',
   split,
@@ -445,4 +445,239 @@ begin
   rw C₁k at C₁',
   symmetry,
   exact C₁',
+end
+
+
+/-
+ Problem 20
+-/
+def is_identity(i: Bird): Prop := ∀ x: Bird, i ⬝ x = x
+
+theorem agreeable_identity(i: Bird)
+  (C₁: is_identity i)
+  (C₂: is_agreeable i)
+:  ∀ x: Bird, is_normal x
+:=
+begin
+  rw is_agreeable at C₂,
+  rw is_identity at C₁,
+  intro a,
+  have C₂a := C₂ a,
+  cases C₂a with x' C₂a',
+  have C₁' := C₁ x',
+  rw C₁' at  C₂a',
+  rw is_normal,
+  existsi x',
+  rw is_fond,
+  symmetry,
+  exact C₂a',
+end
+
+/-
+ Problem 21
+-/
+theorem identity_and_normals(i: Bird)
+  (C₁: is_identity i)
+  (C₂: ∀ x: Bird, is_normal x)
+: is_agreeable i
+:=
+begin
+  rw is_agreeable,
+  intro b,
+  have C₂b := C₂ b,
+  rw is_normal at C₂b,
+  cases C₂b with x' C₂b',
+  rw is_fond at C₂b',
+  existsi x',
+  rw C₂b',
+  rw C₁,
+end
+
+/-
+ Problem 22
+-/
+theorem identity_and_compatibles(i: Bird)
+  (C₁: is_identity i)
+  (C₂: ∀ x y: Bird, is_compatible x y)
+: (∀ x: Bird, is_normal x) ∧ (is_agreeable i)
+:=
+begin
+  rw is_identity at C₁,
+
+  split,
+
+  -- Goal 1
+  intro b,
+  rw is_normal,
+  have C₂bi := C₂ b i,
+  rw is_compatible at C₂bi,
+  cases C₂bi with x' C₂bi',
+  cases C₂bi' with y' C₂bi',
+  cases C₂bi' with C₂byx C₂iyx,
+  rw C₁ at C₂iyx,
+  rw C₂iyx at C₂byx,
+  existsi y',
+  rw is_fond,
+  exact C₂byx,
+
+  -- Goal 2
+  rw is_agreeable,
+  intro b,
+  -- TODO: the next 8 lines are the same as for Goal 1
+  -- except for a different 'b'. How to reuse?
+  have C₂bi := C₂ b i,
+  rw is_compatible at C₂bi,
+  cases C₂bi with x' C₂bi',
+  cases C₂bi' with y' C₂bi',
+  cases C₂bi' with C₂byx C₂iyx,
+  rw C₁ at C₂iyx,
+  rw C₂iyx at C₂byx,
+  existsi y',
+  have C₁y := C₁ y',
+  rw C₁ y',
+  symmetry,
+  exact C₂byx,
+end
+
+/-
+ Problem 23 - Why?
+-/
+theorem hopelessly_egocentric_identity(i: Bird)
+  (C₁: is_identity i)
+  (C₂: is_hopelessly_egocentric i)
+  : ∀ x, x = i
+:=
+begin
+  rw is_hopelessly_egocentric at C₂,
+  rw is_fixated at C₂,
+  rw is_identity at C₁,
+  intro x',
+  have C₁x := C₁ x',
+  have C₂x := C₂ x',
+  rw ←C₁x,
+  rw C₂x,
+end
+
+/-
+ Problem 24
+-/
+
+def is_lark(l: Bird): Prop := ∀ x y: Bird, (l ⬝ x) ⬝ y = x ⬝ (y ⬝ y)
+
+theorem lark_and_identity(i l: Bird)
+  (C₁: is_identity i)
+  (C₂: is_lark l)
+  : ∃ m, is_mocking m
+:=
+begin
+  existsi (l ⬝ i),
+  rw is_mocking,
+  intro x',
+
+  rw is_lark at C₂,
+  have C₂ix := C₂ i x',
+  rw is_identity at C₁,
+  have C₁xx := C₁ (x' ⬝ x'),
+  rw C₁xx at C₂ix,
+  exact C₂ix,
+end
+
+/-
+ Problem 25
+-/
+theorem lark_and_happy(l: Bird)
+  (C₁: is_lark l)
+  : ∀ x, is_happy x
+:=
+begin
+  intro x',
+  -- reduce problem to proving ∀ x, is_normal x.
+  apply (normal_is_happy x'),
+  rw is_normal,
+  have C₁x := C₁ x',
+  have C₁xlx := C₁x (l ⬝ x'),
+  -- TODO: how to intro auxiliary varible
+  -- let k := l ⬝ x' ⬝ (l ⬝ x') does not allow rewriting?
+  existsi l ⬝ x' ⬝ (l ⬝ x'),
+  rw is_fond,
+  symmetry,
+  exact C₁xlx,
+end
+
+/-
+ Problem 26
+-/
+theorem hopelessly_egocentric_lark(l: Bird)
+  (C₁: is_lark l)
+  (C₂: is_hopelessly_egocentric l)
+  : ∀ x, is_fond x l
+:=
+begin
+  intro x',
+  rw is_fond,
+  rw is_lark at C₁,
+  rw is_hopelessly_egocentric at C₂,
+  rw is_fixated at C₂,
+  have C₁xl := C₁ x' l,
+  repeat {rw C₂ at C₁xl},
+  symmetry,
+  exact C₁xl
+end
+
+/-
+ Problem 27
+-/
+
+-- If lark is fond of kestrel, then all birds are egocentric
+lemma lark_fond_of_kestrel_all_egocentric(k l: Bird)
+  (C₁: is_kestrel k)
+  (C₂: is_lark l)
+  (C₃: is_fond l k)
+  : ∀ x, is_egocentric x
+:=
+begin
+  intro x',
+  rw is_kestrel at C₁,
+  rw is_lark at C₂,
+  rw is_fond at C₃,
+
+  have C₂kx' := C₂ k x',
+  rw C₃ at C₂kx',
+
+  have C₁xxk := C₁ (x' ⬝ x') k,
+  rw← C₂kx' at C₁xxk,
+
+  have C₁lk := C₁ x' k,
+  rw C₁xxk at C₁lk,
+
+  rw is_egocentric,
+  rw is_fond,
+  exact  C₁lk,
+end
+
+theorem lark_fond_of_kestrel_same(k l: Bird)
+  (C₁: is_kestrel k)
+  (C₂: is_lark l)
+  (C₃: is_fond l k)
+  : l = k
+:=
+begin
+  rw is_kestrel at C₁,
+
+  -- Goal 1: is_hopelessly_egocentric k
+  let hego_k: is_hopelessly_egocentric k,
+  intro x',
+  have C₁kl := C₁ k x',
+  have all_ego := lark_fond_of_kestrel_all_egocentric k l C₁ C₂ C₃,
+  have ego_k := all_ego k,
+  rw is_egocentric at ego_k,
+  rw is_fond at ego_k,
+  rw ego_k at C₁kl,
+  exact C₁kl,
+
+  -- Goal 2
+  have C₁k := C₁ l k,
+  repeat {rw hego_k at C₁k},
+  symmetry,
+  exact C₁k
 end
