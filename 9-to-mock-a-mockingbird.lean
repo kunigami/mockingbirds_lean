@@ -681,3 +681,28 @@ begin
   symmetry,
   exact C₁k
 end
+
+/-
+ Problem 28
+-/
+theorem kestrel_fond_of_lark(k l: Bird)
+  (C₁: is_kestrel k)
+  (C₂: is_lark l)
+  (C₃: is_fond k l)
+  : ∀ x, is_fond x l
+:=
+begin
+  rw is_kestrel at C₁,
+  rw is_fond at C₃,
+  rw is_lark at C₂,
+  intro x',
+  rw is_fond,
+  have C₁l := C₁ l,
+  rw C₃ at C₁l,
+  -- C₁l : l is hopelessly ego.
+  have C₂x'l := C₂ x' l,
+  rw C₁l x' at C₂x'l,
+  rw C₁l l at C₂x'l,
+  symmetry,
+  exact C₂x'l,
+end
