@@ -13,7 +13,7 @@ infix ⬝ := has_call.call
 instance : has_call Bird := ⟨Call⟩
 
 /-
- Problem 1: The significance of the Mockingbird
+ Problem 9.1: The significance of the Mockingbird
 -/
 
 def composes(a b c: Bird): Prop := ∀ x, c ⬝ x = a ⬝ (b ⬝ x)
@@ -51,7 +51,7 @@ begin
 end
 
 /-
- Problem 2: Egocentric?
+ Problem 9.2: Egocentric?
 -/
 
 def is_egocentric(a: Bird): Prop := is_fond a a
@@ -77,7 +77,7 @@ begin
 end
 
 /-
- Problem 3: Story of the Agrreable Bird
+ Problem 9.3: Story of the Agrreable Bird
 -/
 
 def is_agreeable(a: Bird): Prop := ∀ b: Bird, ∃ x: Bird, a ⬝ x = b ⬝ x
@@ -108,7 +108,7 @@ begin
 end
 
 /-
- Problem 4: A Question on Aggreable Birds
+ Problem 9.4: A Question on Aggreable Birds
 
  This is not an easy one.
 -/
@@ -140,7 +140,7 @@ begin
 end
 
 /-
- Problem 5: An exercise in composition
+ Problem 9.5: An exercise in composition
 -/
 theorem composition3 (a b c: Bird)
 
@@ -161,7 +161,7 @@ begin
 end
 
 /-
- Problem 6: Compatible birds
+ Problem 9.6: Compatible birds
 -/
 def is_compatible(a b: Bird): Prop := ∃ x y: Bird, a ⬝ y = x ∧ b ⬝ x = y
 
@@ -176,7 +176,7 @@ theorem compatible (a b: Bird)
 :=
 begin
   cases C₂ with m C_m,
-  -- Use solution to Problem 5
+  -- Use solution to Problem 9.5
   cases composition3 a b m C₁ with d H,
   have H_d := H d,
   rw is_mocking at C_m,
@@ -195,7 +195,7 @@ begin
 end
 
 /-
- Problem 7: Happy Birds
+ Problem 9.7: Happy Birds
 -/
 
 def is_happy(a: Bird): Prop := is_compatible a a
@@ -218,7 +218,7 @@ end
 
 
 /-
- Problem 8: Normal Birds
+ Problem 9.8: Normal Birds
 -/
 
 theorem happy_may_be_normal (h: Bird)
@@ -247,7 +247,7 @@ begin
 end
 
 /-
- Problem 9: Hopelessly Egocentric
+ Problem 9.9: Hopelessly Egocentric
 -/
 
 def is_fixated(a b: Bird): Prop := ∀ x: Bird, a ⬝ x = b
@@ -280,7 +280,7 @@ end
 
 
 /-
- Problem 10: Fixation
+ Problem 9.10: Fixation
 -/
 theorem fixation (a b: Bird)
   (C₁: is_fixated a b)
@@ -293,7 +293,7 @@ begin
 end
 
 /-
- Problem 11: A Fact About Kestrels
+ Problem 9.11: A Fact About Kestrels
 -/
 theorem hopelessly_egocentric_kestrel (k: Bird)
   (C₁: is_kestrel k)
@@ -310,7 +310,7 @@ begin
 end
 
 /-
- Problem 12: Another Fact About Kestrels
+ Problem 9.12: Another Fact About Kestrels
 -/
 theorem fond_kestrel (k a: Bird)
   (C₁: is_kestrel k)
@@ -327,7 +327,7 @@ begin
 end
 
 /-
- Problem 13: A Simple Exercise
+ Problem 9.13: A Simple Exercise
 -/
 theorem simple_exercise (a: Bird)
   (C₁: is_hopelessly_egocentric a)
@@ -345,7 +345,7 @@ begin
 end
 
 /-
- Problem 14: Another Exercise
+ Problem 9.14: Another Exercise
 -/
 theorem another_exercise (a: Bird)
   (C₁: is_hopelessly_egocentric a)
@@ -363,7 +363,7 @@ begin
 end -- exact same proof as in simple_exercise!
 
 /-
- Problem 15: Hopeless Egocentricity Is Contagious!
+ Problem 9.15: Hopeless Egocentricity Is Contagious!
 -/
 theorem hopeless_egocentricity_is_contagious (a: Bird)
   (C₁: is_hopelessly_egocentric a)
@@ -376,7 +376,7 @@ begin
 end
 
 /-
- Problem 16: Another Fact About Kestrels
+ Problem 9.16: Another Fact About Kestrels
 -/
 theorem kestrel_left_cancellation (k a b: Bird)
   (C₁: is_kestrel k)
@@ -392,7 +392,7 @@ begin
 end
 
 /-
- Problem 17: A Fact About Fixation
+ Problem 9.17: A Fact About Fixation
 -/
 theorem uniqueness_fixation (a b c: Bird)
   (C₁: is_fixated a b)
@@ -407,7 +407,7 @@ begin
 end
 
 /-
- Problem 18: A Fact About Fixation
+ Problem 9.18: A Fact About Fixation
 -/
 theorem fond_kestrel_2 (k a: Bird)
   (C₁: is_kestrel k)
@@ -427,7 +427,7 @@ begin
 end
 
 /-
- Problem 19: A Riddle
+ Problem 9.19: A Riddle
 -/
 theorem egocentric_kestrel (k: Bird)
   (C₁: is_kestrel k)
@@ -449,7 +449,7 @@ end
 
 
 /-
- Problem 20
+ Problem 9.20
 -/
 def is_identity(i: Bird): Prop := ∀ x: Bird, i ⬝ x = x
 
@@ -474,7 +474,7 @@ begin
 end
 
 /-
- Problem 21
+ Problem 9.21
 -/
 theorem identity_and_normals(i: Bird)
   (C₁: is_identity i)
@@ -494,7 +494,7 @@ begin
 end
 
 /-
- Problem 22
+ Problem 9.22
 -/
 theorem identity_and_compatibles(i: Bird)
   (C₁: is_identity i)
@@ -540,7 +540,7 @@ begin
 end
 
 /-
- Problem 23 - Why?
+ Problem 9.23 - Why?
 -/
 theorem hopelessly_egocentric_identity(i: Bird)
   (C₁: is_identity i)
@@ -559,7 +559,7 @@ begin
 end
 
 /-
- Problem 24
+ Problem 9.24
 -/
 
 def is_lark(l: Bird): Prop := ∀ x y: Bird, (l ⬝ x) ⬝ y = x ⬝ (y ⬝ y)
@@ -583,29 +583,39 @@ begin
 end
 
 /-
- Problem 25
+ Problem 9.25
 -/
+
+lemma lark_and_fondness(l: Bird)
+  (C₁: is_lark l)
+  : ∀ x, is_fond x ((l ⬝ x) ⬝ (l ⬝ x))
+:=
+begin
+  intro x',
+  rw is_fond,
+  have C₁x := C₁ x',
+  have C₁xlx := C₁x (l ⬝ x'),
+  symmetry,
+  exact C₁xlx,
+end
+
 theorem lark_and_happy(l: Bird)
   (C₁: is_lark l)
   : ∀ x, is_happy x
 :=
 begin
+  have LF := lark_and_fondness l C₁,
   intro x',
-  -- reduce problem to proving ∀ x, is_normal x.
+  -- reduce Problem 9.to proving ∀ x, is_normal x.
   apply (normal_is_happy x'),
   rw is_normal,
-  have C₁x := C₁ x',
-  have C₁xlx := C₁x (l ⬝ x'),
-  -- TODO: how to intro auxiliary varible
-  -- let k := l ⬝ x' ⬝ (l ⬝ x') does not allow rewriting?
-  existsi l ⬝ x' ⬝ (l ⬝ x'),
-  rw is_fond,
-  symmetry,
-  exact C₁xlx,
+  existsi ((l ⬝ x') ⬝ (l ⬝ x')),
+  have LF' := LF  x',
+  exact LF',
 end
 
 /-
- Problem 26
+ Problem 9.26
 -/
 theorem hopelessly_egocentric_lark(l: Bird)
   (C₁: is_lark l)
@@ -625,7 +635,7 @@ begin
 end
 
 /-
- Problem 27
+ Problem 9.27
 -/
 
 -- If lark is fond of kestrel, then all birds are egocentric
@@ -683,7 +693,7 @@ begin
 end
 
 /-
- Problem 28
+ Problem 9.28
 -/
 theorem kestrel_fond_of_lark(k l: Bird)
   (C₁: is_kestrel k)
@@ -705,4 +715,68 @@ begin
   rw C₁l l at C₂x'l,
   symmetry,
   exact C₂x'l,
+end
+
+/-
+ Problem  10: Is There a Sage Bird
+ (hard)
+-/
+
+lemma lark_exists(l m: Bird)
+  (C₂: is_mocking m)
+  (C₃: ∀ a: Bird, composes a m (l ⬝ a))
+  : is_lark l
+:=
+begin
+  rw is_lark,
+  intro x,
+  intro y,
+  have C₃x := C₃ x,
+  rw composes at C₃x,
+  have C₃xy := C₃x y,
+  rw C₂ at C₃xy,
+  exact C₃xy,
+end
+
+def is_sage(θ: Bird): Prop := ∀ x: Bird, x ⬝ (θ ⬝ x) = θ ⬝ x
+
+theorem sage_exists(m: Bird)
+  (C₁: ∀ a b: Bird, ∃ c: Bird, composes a b c)
+  (C₂: is_mocking m)
+  (C₃: ∃ r, ∀ a: Bird, composes a m (r ⬝ a))
+  : ∃ θ: Bird, is_sage θ
+:=
+begin
+  -- We'll prove that the bird that composes m and l
+  -- is the sage bird θ
+
+  -- given C₂ C₃, a lark exists
+  cases C₃ with l C₃l,
+  have L := lark_exists l m C₂ C₃l,
+
+  -- By definition: θ x = m (l x)
+  have C₁ml := C₁ m l,
+  cases C₁ml with θ C₁ml,
+  existsi θ,
+  rw is_sage,
+
+  intro x',
+
+  -- Use result that
+  -- x' is fond of (l x' (l x'))
+  have LF := lark_and_fondness l L,
+  have LF' := LF x',
+  rw is_fond at LF',
+
+  -- Remove duplicates by using xx -> mx
+  rw is_mocking at C₂,
+  have C₂' := C₂ (l ⬝ x'),
+  rw← C₂' at LF',
+
+  -- Replace m (l x) by θ x
+  rw composes at C₁ml,
+  have C₁ml' := C₁ml x',
+  rw← C₁ml' at LF',
+
+  exact LF',
 end
