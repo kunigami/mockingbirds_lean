@@ -718,7 +718,7 @@ begin
 end
 
 /-
- Problem  10: Is There a Sage Bird
+ Problem 10: Is There a Sage Bird
  (hard)
 -/
 
@@ -779,4 +779,141 @@ begin
   rw← C₁ml' at LF',
 
   exact LF',
+end
+
+/-
+ Problem 11.1
+-/
+
+def is_blue(b: Bird): Prop := ∀ x y z: Bird, b ⬝ x ⬝ y ⬝ z = x ⬝ (y ⬝ z)
+
+theorem blue_implies_composition(b: Bird)
+  (C₁: is_blue b)
+  : ∀ x y: Bird, ∃ z: Bird, composes x y z :=
+begin
+  intro x,
+  intro y,
+  rw is_blue at C₁,
+  existsi b ⬝ x ⬝ y,
+  rw composes,
+  intro z,
+  exact C₁ x y z,
+end
+
+/-
+ Problem 11.2 - blue birds and mocking birds
+-/
+
+theorem fond_of_blue_and_mocking(b m: Bird)
+  (C₁: is_blue b)
+  (C₂: is_mocking m)
+  : ∀ x: Bird, is_fond x (m ⬝ (b ⬝ x ⬝ m)) :=
+begin
+  intro x,
+  rw is_fond,
+  rw is_mocking at C₂,
+  rw is_blue at C₁,
+  rw C₂ (b ⬝ x ⬝ m),
+
+  have C' := C₁ x m (b ⬝ x ⬝ m),
+  rw C₂ (b ⬝ x ⬝ m) at C',
+  symmetry,
+  exact C',
+end
+
+/-
+ Problem 11.3 - egocentric
+ (hard)
+
+  Idea:
+    From 11.2 we have
+    x (m ⬝ (b ⬝ x ⬝ m)) = m ⬝ (b ⬝ x ⬝ m)
+
+    [key step] Replace x with m:
+    m (m ⬝ (b ⬝ m ⬝ m)) = m ⬝ (b ⬝ m ⬝ m)
+
+    let e = m ⬝ (b ⬝ m ⬝ m):
+    me = e
+
+    using mx = xx:
+    ee = e
+
+    So m ⬝ (b ⬝ m ⬝ m) is egocentric
+-/
+
+theorem egocentric_from_blue_and_mocking(b m: Bird)
+  (C₁: is_blue b)
+  (C₂: is_mocking m)
+  : is_egocentric (m ⬝ (b ⬝ m ⬝ m)) :=
+begin
+  have C₃ := fond_of_blue_and_mocking b m C₁ C₂,
+  have C₃m := C₃ m,
+  rw is_fond at C₃m,
+  rw C₂ at C₃m,
+  exact C₃m,
+end
+
+/-
+ Problem 11.4 - hopelessly egocentric
+
+  From 11.2 we have
+  x (m (b x m)) = m (b x m)
+
+  [key step] Replace x with k:
+  k (m (b k m)) = m (b k m)
+
+  let h = m (b k m)
+  k h = h
+
+  By kestrel
+  k h y = h
+  h y = h
+
+-/
+theorem hopelessly_egocentric_from_blue_kestrel_mocking(b k m: Bird)
+  (C₁: is_blue b)
+  (C₂: is_kestrel k)
+  (C₃: is_mocking m)
+  : is_hopelessly_egocentric (m ⬝ (b ⬝ k ⬝ m)) :=
+begin
+  have C₄ := fond_of_blue_and_mocking b m C₁ C₃,
+  have C₄k := C₄ k,
+  rw is_fond at C₄k,
+
+  rw is_kestrel at C₂,
+  have C₂' := C₂ (m ⬝ (b ⬝ k ⬝ m)),
+
+  rw is_hopelessly_egocentric,
+  rw is_fixated,
+  intro x',
+
+  have C₂x' := C₂' x',
+  rw C₄k at C₂x',
+  exact C₂x',
+end
+
+/-
+ Problem 11.5 - doves
+ -/
+def is_dove(d: Bird): Prop :=
+  ∀ x y z w: Bird, d ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ y ⬝ (z ⬝ w)
+
+/-
+  Prove that d = bb
+-/
+theorem dove_from_blue(b: Bird)
+  (C₁: is_blue b)
+  : is_dove(b ⬝ b) :=
+begin
+  rw is_dove,
+  intro x',
+  intro y',
+  intro z',
+  intro w',
+
+  have H₁ := C₁ (x' ⬝ y') z' w',
+  rw ←C₁,
+
+  have H₂ := C₁ b x' y',
+  rw H₂,
 end
