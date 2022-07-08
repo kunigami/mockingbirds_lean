@@ -917,3 +917,32 @@ begin
   have H₂ := C₁ b x' y',
   rw H₂,
 end
+
+/-
+ Problem 11.6 - blackbird
+ -/
+def is_blackbird(b₁: Bird): Prop :=
+  ∀ x y z w: Bird, b₁ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ (y ⬝ z ⬝ w)
+
+/-
+  Prove that db₁ = db
+-/
+theorem blackbird_from_blue(b: Bird)
+  (C₁: is_blue b)
+  : is_blackbird(b ⬝ b ⬝ b) :=
+begin
+  rw is_blackbird,
+  intro x',
+  intro y',
+  intro z',
+  intro w',
+
+  have C₂ := dove_from_blue b C₁,
+  rw is_dove at C₂,
+
+  have H₁ := C₂ b x' y' z',
+  rw H₁,
+
+  have H₂ := C₁ x' (y' ⬝ z') w',
+  exact H₂,
+end
