@@ -925,7 +925,7 @@ def is_blackbird(b₁: Bird): Prop :=
   ∀ x y z w: Bird, b₁ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ (y ⬝ z ⬝ w)
 
 /-
-  Prove that db₁ = db
+  Prove that b₁ = db
 -/
 theorem blackbird_from_blue(b: Bird)
   (C₁: is_blue b)
@@ -945,4 +945,128 @@ begin
 
   have H₂ := C₁ x' (y' ⬝ z') w',
   exact H₂,
+end
+
+/-
+ Problem 11.7 - eagle
+ -/
+def is_eagle(e: Bird): Prop :=
+  ∀ x y z w v: Bird, e ⬝ x ⬝ y ⬝ z ⬝ w ⬝ v = x ⬝ y ⬝ (z ⬝ w ⬝ v)
+
+/-
+  Prove that e = b b₁
+-/
+theorem eagle_from_blue(b b₁: Bird)
+  (C₁: is_blue b)
+  (C₂: is_blackbird b₁)
+  : is_eagle(b ⬝ b₁) :=
+begin
+  rw is_eagle,
+  intro x',
+  intro y',
+  intro z',
+  intro w',
+  intro v',
+
+  rw is_blackbird at C₂,
+  have C₂ := C₂ (x' ⬝ y') z' w' v',
+
+  rw is_blue at C₁,
+  have C₁ := C₁ b₁ x' y',
+
+  rw C₁,
+  rw C₂,
+end
+
+/-
+ Problem 11.8 - bunting
+ -/
+def is_bunting(b₂: Bird): Prop :=
+  ∀ x y z w v: Bird, b₂ ⬝ x ⬝ y ⬝ z ⬝ w ⬝ v = x ⬝ (y ⬝ z ⬝ w ⬝ v)
+
+/-
+  Prove that b₂ = e b
+-/
+theorem bunting_from_blue(b e: Bird)
+  (C₁: is_blue b)
+  (C₂: is_eagle e)
+  : is_bunting(e ⬝ b) :=
+begin
+  rw is_bunting,
+  intro x',
+  intro y',
+  intro z',
+  intro w',
+  intro v',
+
+  rw is_eagle at C₂,
+  have C₂ := C₂ b x' y' z' w',
+
+  rw is_blue at C₁,
+  have C₁ := C₁ x' (y' ⬝ z' ⬝ w') v',
+
+  rw C₂,
+  rw C₁,
+end
+
+/-
+ Problem 11.9 - dickcissel
+ -/
+def is_dickcissel(d₁: Bird): Prop :=
+  ∀ x y z w v: Bird, d₁ ⬝ x ⬝ y ⬝ z ⬝ w ⬝ v = x ⬝ y ⬝ z ⬝ (w ⬝ v)
+
+/-
+  Prove that d₁ = b d
+-/
+theorem dickcissel_from_blue(b d: Bird)
+  (C₁: is_blue b)
+  (C₂: is_dove d)
+  : is_dickcissel(b ⬝ d) :=
+begin
+  rw is_dickcissel,
+  intro x',
+  intro y',
+  intro z',
+  intro w',
+  intro v',
+
+  rw is_blue at C₁,
+  have C₁ := C₁ d x' y',
+
+  rw is_dove at C₂,
+  have C₂ := C₂ (x' ⬝ y') z' w' v',
+
+  rw C₁,
+  rw C₂,
+end
+
+/-
+ Problem 11.10 - becards
+ -/
+def is_becard(b₃: Bird): Prop :=
+  ∀ x y z w: Bird, b₃ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ (y ⬝ (z ⬝ w))
+
+
+/-
+  Prove that b₃ = d₁ b
+-/
+theorem becard_from_blue(b d₁: Bird)
+  (C₁: is_blue b)
+  (C₂: is_dickcissel d₁)
+  : is_becard(d₁ ⬝ b) :=
+begin
+  rw is_becard,
+  intro x',
+  intro y',
+  intro z',
+  intro w',
+
+  rw is_blue at C₁,
+  have C₁ := C₁ x' y' (z' ⬝ w'),
+
+  rw is_dickcissel at C₂,
+  have C₂ := C₂ b x' y' z' w',
+
+  rw C₂,
+  rw C₁,
 end
