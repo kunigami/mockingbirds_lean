@@ -1070,3 +1070,57 @@ begin
   rw C₂,
   rw C₁,
 end
+
+/-
+ Problem 11.11 - dovekies
+ -/
+def is_dovekie(d₂: Bird): Prop :=
+  ∀ x y z w v: Bird, d₂ ⬝ x ⬝ y ⬝ z ⬝ w ⬝ v = x ⬝ (y ⬝ z) ⬝ (w ⬝ v)
+
+theorem dovekie_from_dove(d: Bird)
+  (C₁: is_dove d) :
+  is_dovekie(d ⬝ d) :=
+begin
+  rw is_dovekie,
+  intro x',
+  intro y',
+  intro z',
+  intro w',
+  intro v',
+
+  rw is_dove at C₁,
+  have C₁' := C₁ x' (y' ⬝ z') w' v',
+
+  have C₁'' := C₁ d x' y' z',
+
+  rw C₁'',
+  rw C₁',
+end
+
+/-
+ Problem 11.12 - Bald eagles
+ -/
+def is_bald_eagle(e₁: Bird): Prop :=
+  ∀ x y₁ y₂ y₃ z₁ z₂ z₃: Bird, e₁ ⬝ x ⬝ y₁ ⬝ y₂ ⬝ y₃ ⬝ z₁ ⬝ z₂ ⬝ z₃ = x ⬝ (y₁ ⬝ y₂ ⬝ y₃) ⬝ (z₁ ⬝ z₂ ⬝ z₃)
+
+theorem bald_eagle_from_eagle(e: Bird)
+  (C₁: is_eagle e) :
+  is_bald_eagle(e ⬝ e) :=
+begin
+  rw is_bald_eagle,
+  intro x',
+  intro y₁',
+  intro y₂',
+  intro y₃',
+  intro z₁',
+  intro z₂',
+  intro z₃',
+
+  rw is_eagle at C₁,
+  have C₁' := C₁ x' (y₁' ⬝ y₂' ⬝ y₃') z₁' z₂' z₃',
+
+  have C₁'' := C₁ e x' y₁' y₂' y₃',
+
+  rw C₁'',
+  rw C₁',
+end
