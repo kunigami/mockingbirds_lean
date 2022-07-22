@@ -1124,3 +1124,70 @@ begin
   rw C₁'',
   rw C₁',
 end
+
+
+def is_warbler(w: Bird): Prop :=
+  ∀ x y: Bird, w ⬝ x ⬝ y = x ⬝ y ⬝ y
+
+/-
+ Problem 11.14
+ -/
+theorem mocking_from_warbler_and_identity(w i: Bird)
+  (C₁: is_warbler w)
+  (C₂: is_identity i) :
+  is_mocking(w ⬝ i) :=
+begin
+  rw is_mocking,
+  intro x,
+  have C₁' := C₁ i x,
+  rw C₁',
+  rw C₂,
+end
+
+/-
+ Problem 11.15
+ -/
+theorem identity_from_warbler_and_kestrel(w k: Bird)
+  (C₁: is_warbler w)
+  (C₂: is_kestrel k) :
+  is_identity(w ⬝ k) :=
+begin
+  rw is_identity,
+  intro x,
+  have C₁' := C₁ k x,
+  have C₂' := C₂ x x,
+  rw C₁',
+  exact C₂',
+end
+
+/-
+  Problem 11.13 - warblers
+ -/
+theorem mocking_from_warbler_and_krestel(w k: Bird)
+  (C₁: is_warbler w)
+  (C₂: is_kestrel k) :
+  is_mocking(w ⬝ (w ⬝ k)) :=
+begin
+  have I := identity_from_warbler_and_kestrel w k C₁ C₂,
+  have M := mocking_from_warbler_and_identity w (w ⬝ k) C₁ I,
+  exact M,
+end
+
+/-
+ Problem 11.16
+ -/
+def is_cardinal(c: Bird): Prop :=
+  ∀ x y z: Bird, c ⬝ x ⬝ y ⬝ z = x ⬝ z ⬝ y
+
+theorem identity_from_cardinal_and_krestel(c k: Bird)
+  (C₁: is_cardinal c)
+  (C₂: is_kestrel k) :
+  is_identity(c ⬝ k ⬝ k) :=
+begin
+  rw is_identity,
+  intro x,
+  have C₁' :=  C₁ k k x,
+  have C₂' :=  C₂ x k,
+  rw C₁',
+  exact C₂',
+end
