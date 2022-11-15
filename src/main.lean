@@ -1191,3 +1191,68 @@ begin
   rw C₁',
   exact C₂',
 end
+
+/-
+ Problem 11.17
+ -/
+
+def is_thrush(t: Bird): Prop :=
+  ∀ x y: Bird, t ⬝ x ⬝ y = y ⬝ x
+
+theorem trush_from_cardinal_and_identity(c i: Bird)
+  (C₁: is_cardinal c)
+  (C₂: is_identity i) :
+  is_thrush(c ⬝ i) :=
+begin
+  rw is_thrush,
+  intro x,
+  intro y,
+  have C₁' :=  C₁ i x y,
+  rw C₂ at C₁',
+  exact C₁',
+end
+
+/-
+ Problem 11.18
+ -/
+
+theorem commuting_birds(t: Bird)
+  (C₁: is_thrush t)
+  (C₂: ∀ x: Bird, ∃ c: Bird, x ⬝ c = c) :
+  ∃ a: Bird,  ∀ x: Bird, a ⬝ x = x ⬝ a :=
+begin
+  have C₂' := C₂ t,
+  cases C₂' with ct C₂'t,
+  existsi ct,
+  intro x,
+  have C₁' := C₁ ct x,
+  rw C₂'t at C₁',
+  exact C₁',
+end
+
+/-
+ Problem 11.19
+ -/
+
+/- TODO -/
+
+/-
+ Problem 11.20
+ -/
+def is_robin(r: Bird): Prop :=
+  ∀ x y z: Bird, r ⬝ x ⬝ y ⬝ z = y ⬝ z ⬝ x
+
+theorem robin_from_blue_thrush(b t: Bird)
+ (C₁: is_blue b)
+ (C₂: is_thrush t) :
+  is_robin(b ⬝ b ⬝ t) :=
+begin
+  rw is_robin,
+  intro x,
+  intro y,
+  intro z,
+  rw is_blue at C₁,
+  rw C₁ b t x,
+  rw C₁ (t ⬝ x) y z,
+  rw C₂ x (y ⬝ z),
+end
