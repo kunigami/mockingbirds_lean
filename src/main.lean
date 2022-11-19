@@ -1256,3 +1256,213 @@ begin
   rw C₁ (t ⬝ x) y z,
   rw C₂ x (y ⬝ z),
 end
+
+/-
+ Problem 11.21
+ -/
+theorem cardinal_from_robin(r: Bird)
+ (C₁: is_robin r) :
+  is_cardinal(r ⬝ r ⬝ r) :=
+begin
+  rw is_cardinal,
+  intro x,
+  intro y,
+  intro z,
+  rw C₁,
+  rw C₁,
+  rw C₁,
+end
+
+/-
+ Problem 11.22
+ -/
+
+ /- TODO -/
+
+/-
+ Problem 11.23
+ -/
+
+theorem robin_from_cardinal(c: Bird)
+ (C₁: is_cardinal c) :
+  is_robin(c ⬝ c) :=
+begin
+  rw is_robin,
+  intro x,
+  intro y,
+  intro z,
+  rw C₁,
+  rw C₁,
+end
+
+/-
+ Problem 11.24
+ -/
+def is_finch(f: Bird): Prop :=
+  ∀ x y z: Bird, f ⬝ x ⬝ y ⬝ z = z ⬝ y ⬝ x
+
+theorem finch_from_bcr(b c r: Bird)
+ (C₁: is_blue b)
+ (C₂: is_cardinal c)
+ (C₃: is_robin r) :
+  is_finch(b ⬝ c ⬝ r) :=
+begin
+  rw is_finch,
+  intro x,
+  intro y,
+  intro z,
+  rw C₁,
+  rw C₂,
+  rw C₃
+end
+
+/-
+ Problem 11.25
+ -/
+
+theorem finch_from_et(e t: Bird)
+ (C₁: is_eagle e)
+ (C₂: is_thrush t) :
+  is_finch(e ⬝ t ⬝ t ⬝ e ⬝ t) :=
+begin
+  rw is_finch,
+  intro x,
+  intro y,
+  intro z,
+  rw C₁,
+  rw C₂,
+  rw C₁,
+  rw C₂,
+  rw C₂,
+end
+
+/-
+ Problem 11.26
+ -/
+
+/- TODO -/
+
+/-
+ Problem 11.27
+ -/
+
+def is_vireo(v: Bird): Prop :=
+  ∀ x y z: Bird, v ⬝ x ⬝ y ⬝ z = z ⬝ x ⬝ y
+
+def vireo_from_cf(c f: Bird)
+  (C₁: is_cardinal c)
+  (C₂: is_finch f) :
+  is_vireo(c ⬝ f) :=
+begin
+  rw is_vireo,
+  intro x,
+  intro y,
+  intro z,
+  rw C₁,
+  rw C₂,
+end
+
+
+/-
+ Problem 11.28
+ -/
+
+def vireo_is_rfr(f r: Bird)
+  (C₁: is_finch f)
+  (C₂: is_robin r) :
+  is_vireo(r ⬝ f ⬝ r) :=
+begin
+  rw is_vireo,
+  intro x,
+  intro y,
+  intro z,
+  rw C₂,
+  rw C₂,
+  rw C₁,
+end
+
+/-
+ Problem 11.29
+ -/
+
+def finch_is_cv(c v: Bird)
+  (C₁: is_cardinal c)
+  (C₂: is_vireo v) :
+  is_finch(c ⬝ v) :=
+begin
+  rw is_finch,
+  intro x,
+  intro y,
+  intro z,
+  rw C₁,
+  rw C₂,
+end
+
+/-
+ Problem 11.30
+ -/
+
+def identity_is_rkrk(k r: Bird)
+  (C₁: is_kestrel k)
+  (C₂: is_robin r) :
+  is_identity(r ⬝ k ⬝ r ⬝ k) :=
+begin
+  rw is_identity,
+  intro x,
+  rw C₂,
+  rw C₂,
+  rw C₁,
+end
+
+/-
+ Problem 11.31
+ -/
+
+def is_cardinal_once_removed(c₀: Bird): Prop :=
+  ∀ x y z w: Bird, c₀ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ y ⬝ w ⬝ z
+
+def cardinal_once_removed_is_bc(b c: Bird)
+  (C₁: is_blue b)
+  (C₂: is_cardinal c) :
+  is_cardinal_once_removed(b ⬝ c) :=
+begin
+  rw is_cardinal_once_removed,
+  intro x,
+  intro y,
+  intro z,
+  intro w,
+  rw C₁,
+  rw C₂,
+end
+
+/-
+ Problem 11.32
+ -/
+
+
+def is_robin_once_removed(r₀: Bird): Prop :=
+  ∀ x y z w: Bird, r₀ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ z ⬝ w ⬝ y
+
+
+def robin_once_removed_is_bcbc(b c: Bird)
+  (C₁: is_blue b)
+  (C₂: is_cardinal c) :
+  is_robin_once_removed(b ⬝ c ⬝ (b ⬝ c)) :=
+begin
+  rw is_robin_once_removed,
+  intro x,
+  intro y,
+  intro z,
+  intro w,
+  rw C₁,
+  rw C₂,
+  rw C₁,
+  rw C₂,
+end
+
+/-
+ Problem 11.33
+ -/
+
+def is_flich_once_removed(f₀: Bird): Prop :=
+  ∀ x y z w: Bird, f₀ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ w ⬝ z ⬝ y
