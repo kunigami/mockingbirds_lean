@@ -1440,8 +1440,8 @@ end
  -/
 
 
-def is_robin_once_removed(r₀: Bird): Prop :=
-  ∀ x y z w: Bird, r₀ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ z ⬝ w ⬝ y
+def is_robin_once_removed(r₁: Bird): Prop :=
+  ∀ x y z w: Bird, r₁ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ z ⬝ w ⬝ y
 
 
 def robin_once_removed_is_bcbc(b c: Bird)
@@ -1464,5 +1464,38 @@ end
  Problem 11.33
  -/
 
-def is_flich_once_removed(f₀: Bird): Prop :=
-  ∀ x y z w: Bird, f₀ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ w ⬝ z ⬝ y
+def is_flich_once_removed(f₁: Bird): Prop :=
+  ∀ x y z w: Bird, f₁ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ w ⬝ z ⬝ y
+
+def flich_once_removed_from_bc(b c: Bird)
+  (C₁: is_blue b)
+  (C₂: is_cardinal c) :
+  is_flich_once_removed(b ⬝ (b ⬝ c ⬝ (b ⬝ c)) ⬝ c) :=
+begin
+  rw is_flich_once_removed,
+  intro x,
+  intro y,
+  intro z,
+  intro w,
+  rw [C₁, C₁, C₂, C₁, C₂, C₂],
+end
+
+/-
+ Problem 11.34
+ -/
+
+def is_vireo_once_removed(v₁: Bird): Prop :=
+  ∀ x y z w: Bird, v₁ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ w ⬝ y ⬝ z
+
+def vireo_once_removed_from_bc(b c: Bird)
+  (C₁: is_blue b)
+  (C₂: is_cardinal c) :
+  is_vireo_once_removed(b ⬝ (b ⬝ c) ⬝ c) :=
+begin
+  rw is_vireo_once_removed,
+  intro x,
+  intro y,
+  intro z,
+  intro w,
+  rw [C₁, C₁, C₂, C₂],
+end
