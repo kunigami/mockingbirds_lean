@@ -1268,9 +1268,25 @@ begin
   intro x,
   intro y,
   intro z,
-  rw C₁,
-  rw C₁,
-  rw C₁,
+  rw [C₁, C₁, C₁],
+end
+
+/-
+  Bonus: cardinal from bt.
+  Follows from c = r r r and b = b b t
+
+  TODO: version with length 8
+-/
+theorem cardinal_from_bt(b t: Bird)
+  (C₁: is_blue b)
+  (C₂: is_thrush t) :
+  is_cardinal((b ⬝ b ⬝ t) ⬝ (b ⬝ b ⬝ t) ⬝ (b ⬝ b ⬝ t)) :=
+begin
+  rw is_cardinal,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₁, C₂, C₁, C₁, C₂, C₁, C₁, C₂],
 end
 
 /-
@@ -1418,8 +1434,8 @@ end
  Problem 11.31
  -/
 
-def is_cardinal_once_removed(c₀: Bird): Prop :=
-  ∀ x y z w: Bird, c₀ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ y ⬝ w ⬝ z
+def is_cardinal_once_removed(c₁: Bird): Prop :=
+  ∀ x y z w: Bird, c₁ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ y ⬝ w ⬝ z
 
 def cardinal_once_removed_is_bc(b c: Bird)
   (C₁: is_blue b)
@@ -1464,15 +1480,15 @@ end
  Problem 11.33
  -/
 
-def is_flich_once_removed(f₁: Bird): Prop :=
+def is_finch_once_removed(f₁: Bird): Prop :=
   ∀ x y z w: Bird, f₁ ⬝ x ⬝ y ⬝ z ⬝ w = x ⬝ w ⬝ z ⬝ y
 
 def flich_once_removed_from_bc(b c: Bird)
   (C₁: is_blue b)
   (C₂: is_cardinal c) :
-  is_flich_once_removed(b ⬝ (b ⬝ c ⬝ (b ⬝ c)) ⬝ c) :=
+  is_finch_once_removed(b ⬝ (b ⬝ c ⬝ (b ⬝ c)) ⬝ c) :=
 begin
-  rw is_flich_once_removed,
+  rw is_finch_once_removed,
   intro x,
   intro y,
   intro z,
@@ -1498,4 +1514,231 @@ begin
   intro z,
   intro w,
   rw [C₁, C₁, C₂, C₂],
+end
+
+/-
+ Problem 11.35
+
+ Each of the twice removed can be written as b ⬝ (once removed)
+
+ Since the once removed can be written from b c, it suffices to
+ show a twice removed can be obtained from b c.
+ -/
+
+def is_cardinal_twice_removed(c₂: Bird): Prop :=
+  ∀ x y z₁ z₂ z₃: Bird, c₂ ⬝ x ⬝ y ⬝ z₁ ⬝ z₂ ⬝ z₃ = x ⬝ y ⬝ z₁ ⬝ z₃ ⬝ z₂
+
+def is_robin_twice_removed(c₂: Bird): Prop :=
+  ∀ x y z₁ z₂ z₃: Bird, c₂ ⬝ x ⬝ y ⬝ z₁ ⬝ z₂ ⬝ z₃ = x ⬝ y ⬝ z₂ ⬝ z₃ ⬝ z₁
+
+def is_finch_twice_removed(c₂: Bird): Prop :=
+  ∀ x y z₁ z₂ z₃: Bird, c₂ ⬝ x ⬝ y ⬝ z₁ ⬝ z₂ ⬝ z₃ = x ⬝ y ⬝ z₃ ⬝ z₂ ⬝ z₁
+
+def is_vireo_twice_removed(c₂: Bird): Prop :=
+  ∀ x y z₁ z₂ z₃: Bird, c₂ ⬝ x ⬝ y ⬝ z₁ ⬝ z₂ ⬝ z₃ = x ⬝ y ⬝ z₃ ⬝ z₁ ⬝ z₂
+
+def cardinal_twice_removed_from_bc(b c₁: Bird)
+  (C₁: is_blue b)
+  (C₂: is_cardinal_once_removed c₁) :
+  is_cardinal_twice_removed(b ⬝ c₁) :=
+begin
+  rw is_cardinal_twice_removed,
+  intro x,
+  intro y,
+  intro z₁,
+  intro z₂,
+  intro z₃,
+  rw [C₁, C₂],
+end
+
+def robin_twice_removed_from_bc(b c₁: Bird)
+  (C₁: is_blue b)
+  (C₂: is_robin_once_removed c₁) :
+  is_robin_twice_removed(b ⬝ c₁) :=
+begin
+  rw is_robin_twice_removed,
+  intro x,
+  intro y,
+  intro z₁,
+  intro z₂,
+  intro z₃,
+  rw [C₁, C₂],
+end
+
+def finch_twice_removed_from_bc(b c₁: Bird)
+  (C₁: is_blue b)
+  (C₂: is_finch_once_removed c₁) :
+  is_finch_twice_removed(b ⬝ c₁) :=
+begin
+  rw is_finch_twice_removed,
+  intro x,
+  intro y,
+  intro z₁,
+  intro z₂,
+  intro z₃,
+  rw [C₁, C₂],
+end
+
+def vireo_twice_removed_from_bc(b c₁: Bird)
+  (C₁: is_blue b)
+  (C₂: is_vireo_once_removed c₁) :
+  is_vireo_twice_removed(b ⬝ c₁) :=
+begin
+  rw is_vireo_twice_removed,
+  intro x,
+  intro y,
+  intro z₁,
+  intro z₂,
+  intro z₃,
+  rw [C₁, C₂],
+end
+
+/-
+  Problem 11.36
+ -/
+
+def vireo_from_from_c₁t(c₁ t: Bird)
+  (C₁: is_cardinal_once_removed c₁)
+  (C₂: is_thrush t) :
+  is_vireo(c₁ ⬝ t) :=
+begin
+  rw is_vireo,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₂]
+end
+
+/-
+  Problem 11.37
+ -/
+
+def is_queer(q: Bird): Prop :=
+  ∀ x y z: Bird, q ⬝ x ⬝ y ⬝ z =  y ⬝ (x ⬝ z)
+
+/- c can be written from bt (cardinal_from_bt)  -/
+def queer_from_bt(b c: Bird)
+  (C₁: is_blue b)
+  (C₂: is_cardinal c) :
+  is_queer(c ⬝ b) :=
+begin
+  rw is_queer,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₂, C₁],
+end
+
+/-
+  Problem 11.38
+ -/
+def is_quixotic(q₁: Bird): Prop :=
+  ∀ x y z: Bird, q₁ ⬝ x ⬝ y ⬝ z =  x ⬝ (z ⬝ y)
+
+/-
+  c₁ can be written from bc
+  (cardinal_once_removed_is_bc) and thus from bt
+-/
+def quixotic_from_bc₁(b c₁: Bird)
+  (C₁: is_blue b)
+  (C₂: is_cardinal_once_removed c₁) :
+  is_quixotic(c₁ ⬝ b) :=
+begin
+  rw is_quixotic,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₂, C₁],
+end
+
+/-
+  Problem 11.39
+ -/
+def is_quizical(q₂: Bird): Prop :=
+  ∀ x y z: Bird, q₂ ⬝ x ⬝ y ⬝ z =  y ⬝ (z ⬝ x)
+
+def quixotic_from_br₁(b r₁: Bird)
+  (C₁: is_blue b)
+  (C₂: is_robin_once_removed r₁) :
+  is_quizical(r₁ ⬝ b) :=
+begin
+  rw is_quizical,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₂, C₁],
+end
+
+/-
+  Problem 11.40
+
+  It suffices to show that
+  q₂ = c ⬝ q₁
+  q₁ = c ⬝ q₂
+ -/
+def quizical_from_cq₁(c q₁: Bird)
+  (C₁: is_cardinal c)
+  (C₂: is_quixotic q₁) :
+  is_quizical(c ⬝ q₁) :=
+begin
+  rw is_quizical,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₂],
+end
+
+def quixotic_from_cq₂(c q₂: Bird)
+  (C₁: is_cardinal c)
+  (C₂: is_quizical q₂) :
+  is_quixotic(c ⬝ q₂) :=
+begin
+  rw is_quixotic,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₂],
+end
+
+/-
+  Problem 11.41
+ -/
+
+def is_quirky(q₃: Bird): Prop :=
+  ∀ x y z: Bird, q₃ ⬝ x ⬝ y ⬝ z = z ⬝ (x ⬝ y)
+
+def quirky_from_bt(b t: Bird)
+  (C₁: is_blue b)
+  (C₂: is_thrush t) :
+  is_quirky(b ⬝ t) :=
+begin
+  rw is_quirky,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₂],
+end
+
+/-
+  Problem 11.42
+
+  Note: This is one of the more interesting ones
+  in terms of lean tactics
+ -/
+def is_quacky(q₃: Bird): Prop :=
+  ∀ x y z: Bird, q₃ ⬝ x ⬝ y ⬝ z = z ⬝ (y ⬝ x)
+
+def quackky_from_bt(b t: Bird)
+  (C₁: is_blue b)
+  (C₂: is_thrush t) :
+  is_quacky(b ⬝ (b ⬝ t) ⬝ t) :=
+begin
+  rw is_quacky,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₁],
+  -- rewrite the inner t first
+  nth_rewrite 1 C₂,
+  rw C₂,
 end
