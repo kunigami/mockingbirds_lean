@@ -1725,10 +1725,10 @@ end
   Note: This is one of the more interesting ones
   in terms of lean tactics
  -/
-def is_quacky(q₃: Bird): Prop :=
-  ∀ x y z: Bird, q₃ ⬝ x ⬝ y ⬝ z = z ⬝ (y ⬝ x)
+def is_quacky(q₄: Bird): Prop :=
+  ∀ x y z: Bird, q₄ ⬝ x ⬝ y ⬝ z = z ⬝ (y ⬝ x)
 
-def quackky_from_bt(b t: Bird)
+def quacky_from_bt(b t: Bird)
   (C₁: is_blue b)
   (C₂: is_thrush t) :
   is_quacky(b ⬝ (b ⬝ t) ⬝ t) :=
@@ -1741,4 +1741,102 @@ begin
   -- rewrite the inner t first
   nth_rewrite 1 C₂,
   rw C₂,
+end
+
+/-
+  Problem 11.43
+-/
+
+def quirky_from_cq₄(c q₄: Bird)
+  (C₁: is_cardinal c)
+  (C₂: is_quacky q₄) :
+  is_quirky(c ⬝ q₄) :=
+begin
+  rw is_quirky,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₂],
+end
+
+def quacky_from_cq₃(c q₃: Bird)
+  (C₁: is_cardinal c)
+  (C₂: is_quirky q₃) :
+  is_quacky(c ⬝ q₃) :=
+begin
+  rw is_quacky,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₂],
+end
+
+/-
+  Problem 11.44
+-/
+
+def quacky_from_q₁t(q₁ t: Bird)
+  (C₁: is_quixotic q₁)
+  (C₂: is_thrush t) :
+  is_quacky(q₁ ⬝ t) :=
+begin
+  rw is_quacky,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₂],
+end
+
+/-
+  Problem 11.45
+-/
+def blue_from_qt(q t: Bird)
+  (C₁: is_queer q)
+  (C₂: is_thrush t) :
+  is_blue(q ⬝ t ⬝ (q ⬝ q)) :=
+begin
+  rw is_blue,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₁, C₂, C₁],
+end
+
+/-
+  Problem 11.46
+-/
+def cardinal_from_qt(q t: Bird)
+  (C₁: is_queer q)
+  (C₂: is_thrush t) :
+  is_cardinal(q ⬝ q ⬝ (q ⬝ t)) :=
+begin
+  rw is_cardinal,
+  intro x,
+  intro y,
+  intro z,
+  rw [C₁, C₁, C₁, C₂],
+end
+
+/-
+  Problem 11.47
+-/
+def is_goldfinch(g: Bird): Prop :=
+  ∀ x y z w: Bird, g ⬝ x ⬝ y ⬝ z ⬝ w =  x ⬝ w ⬝ (y ⬝ z)
+
+/-
+  Showing that g = bbc suffices since
+  c = rrr (via 11.21)
+  r = bbt (via 11.20)
+-/
+def goldfinch_from_bt(b c: Bird)
+  (C₁: is_blue b)
+  (C₂: is_cardinal c) :
+  is_goldfinch(b ⬝ b ⬝ c) :=
+begin
+  rw is_goldfinch,
+  intro x,
+  intro y,
+  intro z,
+  intro w,
+  rw [C₁, C₁, C₂],
 end
